@@ -3,16 +3,26 @@ package de.msg.dindex.crawler;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import javax.swing.SpringLayout.Constraints;
+
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
 
 public class MyCrawler extends WebCrawler {
-
+	
+	
+	
 	private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg"
 			+ "|png|mp3|mp4|zip|gz))$");
 
+	
+	LocalCrawlerData data;
+	
+	public MyCrawler() {
+		data = new LocalCrawlerData();
+	}
 	/**
 	 * This method receives two parameters. The first parameter is the page
 	 * in which we have discovered this new url and the second parameter is
@@ -48,7 +58,19 @@ public class MyCrawler extends WebCrawler {
 			System.out.println("Text length: " + text.length());
 			System.out.println("Html length: " + html.length());
 			System.out.println("Number of outgoing links: " + links.size());
+			
+			if (text.toLowerCase().contains("digitalisierung")) {
+				data.countMatch();
+				System.out.println("'Digitalisierung' found in page text. Total matches: " + data.getMatchCounter());
+				
+			}
 		}
 	}
+	
+	
+    @Override
+    public Object getMyLocalData() {
+        return data;
+    }
 }
 

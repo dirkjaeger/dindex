@@ -1,5 +1,7 @@
 package de.msg.dindex.crawler;
 
+import java.util.List;
+
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
@@ -10,6 +12,7 @@ public class Controller {
 	
     public void run() throws Exception {
     	
+    	String rootURL = "https://www.msg.group/";
         String crawlStorageFolder = "/home/developer/data/crawl/root";
         int numberOfCrawlers = 1;
 
@@ -31,12 +34,22 @@ public class Controller {
          */
         //controller.addSeed("https://www.ics.uci.edu/~lopes/");
         // controller.addSeed("https://www.ics.uci.edu/~welling/");
-    	controller.addSeed("https://www.msg.group/");
+    	controller.addSeed(rootURL);
 
         /*
          * Start the crawl. This is a blocking operation, meaning that your code
          * will reach the line after this only when crawling is finished.
          */
         controller.start(MyCrawler.class, numberOfCrawlers);
+        List<Object> list = controller.getCrawlersLocalData();
+
+        int indexValue = 0;
+        for (Object data : list) {
+        	
+        	indexValue += ((LocalCrawlerData) data).getMatchCounter();
+        }
+        
+        System.out.println("=================================================================================");
+        System.out.println("Digitalisierungsindex der Seite " + rootURL + " = " + indexValue);
     }
 }	
